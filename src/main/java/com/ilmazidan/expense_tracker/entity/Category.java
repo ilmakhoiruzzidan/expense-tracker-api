@@ -22,6 +22,9 @@ public class Category {
     @Column(name = "category", nullable = false)
     private ExpenseCategory category;
 
+    @Column(name = "description")
+    private String description;
+
     @OneToMany(mappedBy = "category")
     private List<Expense> expenses;
 }
