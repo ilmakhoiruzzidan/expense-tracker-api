@@ -1,6 +1,7 @@
 package com.ilmazidan.expense_tracker.repository;
 
 import com.ilmazidan.expense_tracker.entity.UserAccount;
+import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -40,6 +41,7 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, String
     boolean existsByUsername(String username);
 
 
+    @NonNull
     @Query(
             nativeQuery = true,
             value = "SELECT * FROM m_user_account"

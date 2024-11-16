@@ -1,6 +1,7 @@
 package com.ilmazidan.expense_tracker.repository;
 
 import com.ilmazidan.expense_tracker.entity.Category;
+import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -10,7 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -33,11 +33,12 @@ public interface CategoryRepository extends JpaRepository<Category, String> {
     )
     Page<Category> findAll(Specification<Category> categorySpecification, Pageable pageable);
 
+    @NonNull
     @Query(
             nativeQuery = true,
             value = "SELECT * FROM m_category WHERE id = :id"
     )
-    Optional<Category> findById(String id);
+    Optional<Category> findById(@NonNull String id);
 
     @Modifying
     @Transactional
@@ -45,7 +46,7 @@ public interface CategoryRepository extends JpaRepository<Category, String> {
             nativeQuery = true,
             value = "DELETE FROM m_category WHERE id = :id"
     )
-    void deleteById(String id);
+    void deleteById(@NonNull String id);
 
     @Modifying
     @Query(
