@@ -34,7 +34,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException
     {
         try {
-            log.info("ini kepanggil");
             String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
             String token = parseToken(bearerToken);
             if (token != null) {

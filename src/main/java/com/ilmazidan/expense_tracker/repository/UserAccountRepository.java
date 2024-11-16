@@ -46,6 +46,11 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, String
     )
     List<UserAccount> findAll();
 
+    @Query(
+            nativeQuery = true,
+            value = "SELECT * FROM m_user_account WHERE username = :username"
+    )
+    Optional<UserAccount> findByUsername(String username);
 
 }
 

@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserService {
         return userAccountRepository.save(userAccount);
     }
 
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional(readOnly = true)
     @Override
     public UserAccount getById(String id) {
         return userAccountRepository.findUserById(id).orElseThrow(
@@ -85,8 +85,11 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    @Transactional(readOnly = true)
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+        return userAccountRepository.findByUsername(username).orElseThrow(
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND)
+        );
     }
 }
