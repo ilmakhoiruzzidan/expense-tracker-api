@@ -7,7 +7,7 @@ import com.ilmazidan.expense_tracker.dto.response.CategoryResponse;
 import com.ilmazidan.expense_tracker.entity.Category;
 import com.ilmazidan.expense_tracker.repository.CategoryRepository;
 import com.ilmazidan.expense_tracker.service.CategoryService;
-import com.ilmazidan.expense_tracker.spesification.CategorySpecification;
+import com.ilmazidan.expense_tracker.specification.CategorySpecification;
 import com.ilmazidan.expense_tracker.util.Mapper;
 import com.ilmazidan.expense_tracker.util.SortUtil;
 import com.ilmazidan.expense_tracker.util.ValidationUtil;
@@ -46,7 +46,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public CategoryResponse updateCategory(CategoryRequest request, String id) {
-        Category category = findOne(id);
+        Category category = getOne(id);
         Category newCategory = Category.builder()
                 .id(category.getId())
                 .category(ExpenseCategory.findByDescription(request.getCategoryName()))
@@ -60,7 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteCategory(String id) {
-        Category category = findOne(id);
+        Category category = getOne(id);
         categoryRepository.deleteById(category.getId());
     }
 
@@ -77,13 +77,13 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional(readOnly = true)
     @Override
     public CategoryResponse getCategoryById(String id) {
-        Category category = findOne(id);
+        Category category = getOne(id);
         return Mapper.toCategoryResponse(category);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Category findOne(String id) {
+    public Category getOne(String id) {
         return categoryRepository.findById(id).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND)
         );

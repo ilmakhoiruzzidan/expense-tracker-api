@@ -17,5 +17,5 @@ public interface CategoryService {
 
     void deleteCategory(String id);
 
-    Category findOne(String id);
+    Category getOne(String id);
 }

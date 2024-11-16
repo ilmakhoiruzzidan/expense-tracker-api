@@ -20,7 +20,7 @@ public class PaymentMethod {
 
     @Column(name = "payment_method", nullable = false)
     @Enumerated(EnumType.STRING)
-    private PaymentMethodType paymentMethod;
+    private PaymentMethodType paymentMethodType;
 
     @Column(name = "description")
     private String description;

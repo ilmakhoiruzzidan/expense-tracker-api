@@ -1,4 +1,4 @@
-package com.ilmazidan.expense_tracker.spesification;
+package com.ilmazidan.expense_tracker.specification;
 
 import com.ilmazidan.expense_tracker.dto.request.PagingAndSortRequest;
 import com.ilmazidan.expense_tracker.entity.Category;

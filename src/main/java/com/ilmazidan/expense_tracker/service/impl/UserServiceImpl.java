@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
         if (isExist) return;
         try {
             UserAccount userAccount = UserAccount.builder()
-                    .id(UUID.randomUUID().toString()) // Explicitly set UUID
+                    .id(UUID.randomUUID().toString())
                     .username(USERNAME_ADMIN)
                     .password(passwordEncoder.encode(PASSWORD_ADMIN))
                     .role(UserRole.ROLE_ADMIN)
@@ -60,6 +60,7 @@ public class UserServiceImpl implements UserService {
             if (userRole == null)
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error role not found");
             UserAccount userAccount = UserAccount.builder()
+                    .id(UUID.randomUUID().toString())
                     .username(request.getUsername())
                     .password(passwordEncoder.encode(request.getPassword()))
                     .role(userRole)
