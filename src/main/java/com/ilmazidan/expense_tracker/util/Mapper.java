@@ -1,6 +1,5 @@
 package com.ilmazidan.expense_tracker.util;
 
-import com.ilmazidan.expense_tracker.constant.PaymentMethodType;
 import com.ilmazidan.expense_tracker.dto.response.*;
 import com.ilmazidan.expense_tracker.entity.*;
 

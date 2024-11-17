@@ -1,6 +1,5 @@
 package com.ilmazidan.expense_tracker.entity;
 
-import com.ilmazidan.expense_tracker.audit.Auditable;
 import jakarta.persistence.*;
 import lombok.*;
 
