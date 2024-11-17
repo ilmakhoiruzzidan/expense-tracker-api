@@ -42,7 +42,7 @@ public class Constant {
 
     // Category Controller
     public static final String SUCCESS_RETRIEVE_ALL_CATEGORIES = "Successfully retrieved all categories";
-    public static final String SUCCESS_RETRiEVE_CATEGORY = "Success retrieve category";
+    public static final String SUCCESS_RETRIEVE_CATEGORY = "Success retrieve category";
     public static final String SUCCESS_CREATE_CATEGORY = "Successfully create category";
     public static final String SUCCESS_UPDATE_CATEGORY = "Successfully update category";
     public static final String SUCCESS_DELETE_CATEGORY = "Successfully delete category";// Category Controller
