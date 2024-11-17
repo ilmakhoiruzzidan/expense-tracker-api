@@ -27,11 +27,12 @@ public interface PaymentMethodRepository extends JpaRepository<PaymentMethod, St
     )
     void savePaymentMethod(PaymentMethod paymentMethod);
 
+    @NonNull
     @Query(
             nativeQuery = true,
             value = "SELECT * FROM m_payment_method"
     )
-    Page<PaymentMethod> findAll(Specification<PaymentMethod> paymentMethodSpecification, Pageable pageable);
+    Page<PaymentMethod> findAll(@NonNull Pageable pageable);
 
     @NonNull
     @Query(

@@ -7,7 +7,6 @@ import com.ilmazidan.expense_tracker.dto.response.PaymentMethodResponse;
 import com.ilmazidan.expense_tracker.entity.PaymentMethod;
 import com.ilmazidan.expense_tracker.repository.PaymentMethodRepository;
 import com.ilmazidan.expense_tracker.service.PaymentMethodService;
-import com.ilmazidan.expense_tracker.specification.PaymentMethodSpecification;
 import com.ilmazidan.expense_tracker.util.Mapper;
 import com.ilmazidan.expense_tracker.util.SortUtil;
 import com.ilmazidan.expense_tracker.util.ValidationUtil;
@@ -16,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,8 +66,7 @@ public class PaymentMethodServiceImpl implements PaymentMethodService {
     public Page<PaymentMethodResponse> getAllPaymentMethods(PagingAndSortRequest request) {
         Sort sort = SortUtil.parseSort(request.getSortBy());
         Pageable pageable = PageRequest.of(request.getPage(), request.getSize(), sort);
-        Specification<PaymentMethod> paymentMethodSpecification = PaymentMethodSpecification.getSpecification(request);
-        Page<PaymentMethod> paymentMethods = paymentMethodRepository.findAll(paymentMethodSpecification, pageable);
+        Page<PaymentMethod> paymentMethods = paymentMethodRepository.findAll(pageable);
         return paymentMethods.map(Mapper::toPaymentMethodResponse);
     }
 
