@@ -36,7 +36,7 @@ public interface PaymentMethodRepository extends JpaRepository<PaymentMethod, St
     @NonNull
     @Query(
             nativeQuery = true,
-            value = "SELECT FROM m_payment_method WHERE id = :id"
+            value = "SELECT * FROM m_payment_method WHERE id = :id"
     )
     Optional<PaymentMethod> findById(@NonNull String id);
 
