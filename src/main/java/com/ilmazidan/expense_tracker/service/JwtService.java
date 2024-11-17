@@ -9,5 +9,4 @@ public interface JwtService {
 
     String extractTokenFromRequest(HttpServletRequest request);
     void blacklistAccessToken(String accessToken);
-    boolean isTokenBlacklisted(String token);
 }

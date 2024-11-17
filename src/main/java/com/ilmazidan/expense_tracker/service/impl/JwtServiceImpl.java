@@ -12,6 +12,7 @@ import com.ilmazidan.expense_tracker.service.RedisService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,9 +28,12 @@ import java.util.Date;
 @RequiredArgsConstructor
 @Slf4j
 public class JwtServiceImpl implements JwtService {
-    private final String SECRET_KEY = "Secret";
-    private final Long EXPIRATION_IN_MINUTES = 5L;
-    private final String ISSUER = "Expense Tracker API";
+    @Value("${expense-tracker.jwt.sercret-key}")
+    private String SECRET_KEY;
+    @Value("${expense-tracker.jwt.expiration-in-minutes}")
+    private Long EXPIRATION_IN_MINUTES;
+    @Value("${expense-tracker.jwt.issuer}")
+    private String ISSUER;
 
     private final RedisService redisService;
 
@@ -57,9 +61,7 @@ public class JwtServiceImpl implements JwtService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
             JWTVerifier verifier = JWT.require(algorithm)
-                    // specify any specific claim validations
                     .withIssuer(ISSUER)
-                    // reusable verifier instance
                     .build();
             DecodedJWT decodedJWT = verifier.verify(token);
             return decodedJWT.getSubject();
@@ -88,11 +90,6 @@ public class JwtServiceImpl implements JwtService {
         long timeLeft = (expiresAt.getTime() - System.currentTimeMillis());
 
         redisService.save(token, "BLACKLISTED", Duration.ofMillis(timeLeft));
-    }
-
-    @Override
-    public boolean isTokenBlacklisted(String token) {
-        return false;
     }
 
     private String parseToken(String bearerToken) {

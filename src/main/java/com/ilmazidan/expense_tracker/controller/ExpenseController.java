@@ -5,6 +5,8 @@ import com.ilmazidan.expense_tracker.dto.request.PagingAndSortRequest;
 import com.ilmazidan.expense_tracker.dto.response.ExpenseResponse;
 import com.ilmazidan.expense_tracker.service.ExpenseService;
 import com.ilmazidan.expense_tracker.util.ResponseUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -14,9 +16,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/expenses")
 @RequiredArgsConstructor
+@Tag(name = "Expense Controller", description = "Manage expenses")
 public class ExpenseController {
     private final ExpenseService expenseService;
 
+    @Operation(summary = "Create an expense", description = "Add a new expense to the system")
     @PostMapping
     public ResponseEntity<?> createExpense(@RequestBody ExpenseRequest request) {
         ExpenseResponse expenseResponse = expenseService.createExpense(request);
@@ -29,6 +33,7 @@ public class ExpenseController {
         return ResponseUtil.buildResponse(HttpStatus.OK, "Successfully retrieved expense", expenseResponse);
     }
 
+    @Operation(summary = "Get all expenses", description = "Retrieve a paginated list of all expenses")
     @GetMapping
     public ResponseEntity<?> getAllExpenses(
             @RequestParam(name = "sortBy", required = false) String sortBy,
