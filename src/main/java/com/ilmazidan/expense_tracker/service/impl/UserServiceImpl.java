@@ -13,6 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -84,6 +86,14 @@ public class UserServiceImpl implements UserService {
         return userAccountRepository.findUserById(id).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND)
         );
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public UserResponse getAuthentication() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserAccount userAccount = (UserAccount) authentication.getPrincipal();
+        return Mapper.toUserResponse(userAccount);
     }
 
     @Transactional(readOnly = true)

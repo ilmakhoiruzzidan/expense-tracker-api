@@ -21,5 +21,10 @@ public class UserController {
         return ResponseUtil.buildResponse(HttpStatus.OK, "Successfully create user", userResponse);
     }
 
+    @GetMapping("/me")
+    public ResponseEntity<?> getCurrentUserInfo() {
+        UserResponse userResponse = userService.getAuthentication();
+        return ResponseUtil.buildResponse(HttpStatus.OK, "Successfully retrieve current user info", userResponse);
+    }
 
 }

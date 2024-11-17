@@ -9,4 +9,5 @@ public interface UserService extends UserDetailsService {
     UserResponse create(UserRequest request);
     UserAccount create(UserAccount userAccount);
     UserAccount getById(String id);
+    UserResponse getAuthentication();
 }
