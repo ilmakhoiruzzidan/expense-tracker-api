@@ -1,13 +1,8 @@
 package com.ilmazidan.expense_tracker.util;
 
 import com.ilmazidan.expense_tracker.constant.PaymentMethodType;
-import com.ilmazidan.expense_tracker.dto.response.CategoryResponse;
-import com.ilmazidan.expense_tracker.dto.response.PaymentMethodResponse;
-import com.ilmazidan.expense_tracker.dto.response.RegisterResponse;
-import com.ilmazidan.expense_tracker.dto.response.UserResponse;
-import com.ilmazidan.expense_tracker.entity.Category;
-import com.ilmazidan.expense_tracker.entity.PaymentMethod;
-import com.ilmazidan.expense_tracker.entity.UserAccount;
+import com.ilmazidan.expense_tracker.dto.response.*;
+import com.ilmazidan.expense_tracker.entity.*;
 
 public class Mapper {
     public static UserResponse toUserResponse(UserAccount userAccount) {
@@ -41,4 +36,24 @@ public class Mapper {
                 .description(paymentMethod.getDescription())
                 .build();
     }
+
+    public static ExpensePaymentResponse toExpensePaymentResponse(ExpensePayment expensePayment) {
+        return ExpensePaymentResponse.builder()
+                .id(expensePayment.getId())
+                .expenseId(expensePayment.getExpense().getId())
+                .paymentId(expensePayment.getPaymentMethod().getId())
+                .build();
+    }
+
+    public static ExpenseResponse toExpenseResponse(Expense expense) {
+        return ExpenseResponse.builder()
+                .id(expense.getId())
+                .amountPaid(expense.getAmountPaid())
+                .categoryId(expense.getCategory().getId())
+                .expenseDate(expense.getExpenseDate())
+                .description(expense.getDescription())
+                .userId(expense.getUserAccount().getId())
+                .build();
+    }
+
 }
