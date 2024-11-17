@@ -7,7 +7,6 @@ import com.ilmazidan.expense_tracker.dto.response.CategoryResponse;
 import com.ilmazidan.expense_tracker.entity.Category;
 import com.ilmazidan.expense_tracker.repository.CategoryRepository;
 import com.ilmazidan.expense_tracker.service.CategoryService;
-import com.ilmazidan.expense_tracker.specification.CategorySpecification;
 import com.ilmazidan.expense_tracker.util.Mapper;
 import com.ilmazidan.expense_tracker.util.SortUtil;
 import com.ilmazidan.expense_tracker.util.ValidationUtil;
@@ -16,7 +15,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -69,8 +67,7 @@ public class CategoryServiceImpl implements CategoryService {
     public Page<CategoryResponse> getAllCategories(PagingAndSortRequest request) {
         Sort sort = SortUtil.parseSort(request.getSortBy());
         Pageable pageable = PageRequest.of(request.getPage(), request.getSize(), sort);
-        Specification<Category> categorySpecification = CategorySpecification.getSpecification(request);
-        Page<Category> categoryPage = categoryRepository.findAll(categorySpecification, pageable);
+        Page<Category> categoryPage = categoryRepository.findAll(pageable);
         return categoryPage.map(Mapper::toCategoryResponse);
     }
 
