@@ -1,5 +1,6 @@
 package com.ilmazidan.expense_tracker.entity;
 
+import com.ilmazidan.expense_tracker.constant.Constant;
 import com.ilmazidan.expense_tracker.constant.ExpenseCategory;
 import jakarta.persistence.*;
 import lombok.*;
@@ -7,7 +8,7 @@ import lombok.*;
 import java.util.List;
 
 @Entity
-@Table(name = "m_category")
+@Table(name = Constant.CATEGORY_TABLE)
 @Getter
 @Setter
 @AllArgsConstructor

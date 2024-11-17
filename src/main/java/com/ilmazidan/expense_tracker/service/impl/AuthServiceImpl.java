@@ -1,5 +1,6 @@
 package com.ilmazidan.expense_tracker.service.impl;
 
+import com.ilmazidan.expense_tracker.constant.Constant;
 import com.ilmazidan.expense_tracker.constant.UserRole;
 import com.ilmazidan.expense_tracker.dto.request.AuthRequest;
 import com.ilmazidan.expense_tracker.dto.request.RegisterRequest;
@@ -59,9 +60,9 @@ public class AuthServiceImpl implements AuthService {
     public RegisterResponse register(RegisterRequest request) {
         try {
             validationUtil.validate(request);
-            if (request.getRole().equalsIgnoreCase("ADMIN")) {
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error role is not found");
-            } else if (request.getRole().equalsIgnoreCase("USER")) {
+            if (request.getRole().equalsIgnoreCase(Constant.ADMIN)) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, Constant.ERROR_ROLE_NOT_FOUND);
+            } else if (request.getRole().equalsIgnoreCase(Constant.USER)) {
                 UserAccount userAccount = UserAccount.builder()
                         .id(UUID.randomUUID().toString())
                         .username(request.getUsername())
@@ -71,7 +72,7 @@ public class AuthServiceImpl implements AuthService {
                 userService.create(userAccount);
                 return Mapper.toRegisterResponse(userAccount);
             } else {
-                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid role");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Constant.ERROR_INVALID_ROLE);
             }
         } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());

@@ -1,12 +1,13 @@
 package com.ilmazidan.expense_tracker.entity;
 
+import com.ilmazidan.expense_tracker.constant.Constant;
 import com.ilmazidan.expense_tracker.constant.PaymentMethodType;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
 
-@Table(name = "m_payment_method")
+@Table(name = Constant.PAYMENT_METHOD_TABLE)
 @Entity
 @Getter
 @Setter

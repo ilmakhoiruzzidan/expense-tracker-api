@@ -1,5 +1,6 @@
 package com.ilmazidan.expense_tracker.service.impl;
 
+import com.ilmazidan.expense_tracker.constant.Constant;
 import com.ilmazidan.expense_tracker.constant.PaymentMethodType;
 import com.ilmazidan.expense_tracker.dto.request.PagingAndSortRequest;
 import com.ilmazidan.expense_tracker.dto.request.PaymentMethodRequest;
@@ -81,7 +82,7 @@ public class PaymentMethodServiceImpl implements PaymentMethodService {
     @Override
     public PaymentMethod getOne(String id) {
         return paymentMethodRepository.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND)
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, Constant.ERROR_PAYMENT_METHOD_NOT_FOUND)
         );
     }
 }

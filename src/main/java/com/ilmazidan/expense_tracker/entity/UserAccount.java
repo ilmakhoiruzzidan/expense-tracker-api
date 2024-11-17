@@ -1,6 +1,6 @@
 package com.ilmazidan.expense_tracker.entity;
 
-import com.ilmazidan.expense_tracker.audit.Auditable;
+import com.ilmazidan.expense_tracker.constant.Constant;
 import com.ilmazidan.expense_tracker.constant.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
-@Table(name = "m_user_account")
+@Table(name = Constant.USER_TABLE)
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor

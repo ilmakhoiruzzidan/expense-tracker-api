@@ -1,5 +1,6 @@
 package com.ilmazidan.expense_tracker.controller;
 
+import com.ilmazidan.expense_tracker.constant.Constant;
 import com.ilmazidan.expense_tracker.dto.request.ExpenseRequest;
 import com.ilmazidan.expense_tracker.dto.request.PagingAndSortRequest;
 import com.ilmazidan.expense_tracker.dto.response.ExpenseResponse;
@@ -13,8 +14,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.ilmazidan.expense_tracker.constant.Constant.*;
+
 @RestController
-@RequestMapping("/api/expenses")
+@RequestMapping(Constant.EXPENSES_API)
 @RequiredArgsConstructor
 @Tag(name = "Expense Controller", description = "Manage expenses")
 public class ExpenseController {
@@ -24,13 +27,13 @@ public class ExpenseController {
     @PostMapping
     public ResponseEntity<?> createExpense(@RequestBody ExpenseRequest request) {
         ExpenseResponse expenseResponse = expenseService.createExpense(request);
-        return ResponseUtil.buildResponse(HttpStatus.OK, "Successfully created expense", expenseResponse);
+        return ResponseUtil.buildResponse(HttpStatus.OK, SUCCESS_CREATE_EXPENSE, expenseResponse);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getExpenseById(@PathVariable String id) {
         ExpenseResponse expenseResponse = expenseService.getExpenseById(id);
-        return ResponseUtil.buildResponse(HttpStatus.OK, "Successfully retrieved expense", expenseResponse);
+        return ResponseUtil.buildResponse(HttpStatus.OK, SUCCESS_RETRiEVE_EXPENSE, expenseResponse);
     }
 
     @Operation(summary = "Get all expenses", description = "Retrieve a paginated list of all expenses")
@@ -47,18 +50,18 @@ public class ExpenseController {
                 .build();
 
         Page<ExpenseResponse> expenseResponses = expenseService.getAllExpenses(pagingAndSortRequest);
-        return ResponseUtil.buildResponsePagination(HttpStatus.OK, "Successfully retrieved expenses", expenseResponses);
+        return ResponseUtil.buildResponsePagination(HttpStatus.OK, SUCCESS_RETRIEVE_ALL_EXPENSES, expenseResponses);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateExpense(@PathVariable String id,@RequestBody ExpenseRequest request) {
         ExpenseResponse expenseResponse = expenseService.updateExpense(request, id);
-        return ResponseUtil.buildResponse(HttpStatus.OK, "Successfully updated expense", expenseResponse);
+        return ResponseUtil.buildResponse(HttpStatus.OK, SUCCESS_UPDATE_EXPENSE, expenseResponse);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteExpense(@PathVariable String id) {
         ExpenseResponse expenseResponse = expenseService.deleteExpense(id);
-        return ResponseUtil.buildResponse(HttpStatus.OK, "Successfully deleted expense", null);
+        return ResponseUtil.buildResponse(HttpStatus.OK, SUCCESS_DELETE_EXPENSE, null);
     }
 }

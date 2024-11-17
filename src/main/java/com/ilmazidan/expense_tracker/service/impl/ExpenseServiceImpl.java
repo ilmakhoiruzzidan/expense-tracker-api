@@ -1,5 +1,6 @@
 package com.ilmazidan.expense_tracker.service.impl;
 
+import com.ilmazidan.expense_tracker.constant.Constant;
 import com.ilmazidan.expense_tracker.dto.request.ExpenseRequest;
 import com.ilmazidan.expense_tracker.dto.request.PagingAndSortRequest;
 import com.ilmazidan.expense_tracker.dto.response.ExpenseResponse;
@@ -102,7 +103,7 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Override
     public Expense getOne(String id) {
         return expenseRepository.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense not found")
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, Constant.ERROR_EXPENSE_NOT_FOUND)
         );
     }
 

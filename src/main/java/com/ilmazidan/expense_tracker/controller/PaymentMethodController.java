@@ -1,5 +1,6 @@
 package com.ilmazidan.expense_tracker.controller;
 
+import com.ilmazidan.expense_tracker.constant.Constant;
 import com.ilmazidan.expense_tracker.dto.request.PagingAndSortRequest;
 import com.ilmazidan.expense_tracker.dto.request.PaymentMethodRequest;
 import com.ilmazidan.expense_tracker.dto.response.PaymentMethodResponse;
@@ -12,8 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import static com.ilmazidan.expense_tracker.constant.Constant.*;
+
 @RestController
-@RequestMapping("/api/payment-methods")
+@RequestMapping(Constant.PAYMENT_METHODS_API)
 @RequiredArgsConstructor
 public class PaymentMethodController {
     private final PaymentMethodService paymentMethodService;
@@ -30,19 +33,19 @@ public class PaymentMethodController {
                 .sortBy(sortBy)
                 .build();
         Page<PaymentMethodResponse> paymentMethodResponses = paymentMethodService.getAllPaymentMethods(pagingAndSortRequest);
-        return ResponseUtil.buildResponsePagination(HttpStatus.OK, "Success retrieve all payment methods", paymentMethodResponses);
+        return ResponseUtil.buildResponsePagination(HttpStatus.OK, SUCCESS_RETRIEVE_ALL_PAYMENT_METHODS, paymentMethodResponses);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getPaymentMethodById(@PathVariable String id) {
         PaymentMethodResponse paymentMethodResponse = paymentMethodService.getPaymentMethodById(id);
-        return ResponseUtil.buildResponse(HttpStatus.OK, "Success retrieve payment method", paymentMethodResponse);
+        return ResponseUtil.buildResponse(HttpStatus.OK, SUCCESS_RETRiEVE_PAYMENT_METHOD, paymentMethodResponse);
     }
 
     @PostMapping
     public ResponseEntity<?> createPaymentMethod(@RequestBody PaymentMethodRequest request) {
         PaymentMethodResponse paymentMethodResponse = paymentMethodService.createPaymentMethod(request);
-        return ResponseUtil.buildResponse(HttpStatus.CREATED, "Payment method created", paymentMethodResponse);
+        return ResponseUtil.buildResponse(HttpStatus.CREATED, SUCCESS_CREATE_PAYMENT_METHOD, paymentMethodResponse);
     }
 
     @PutMapping("/{id}")
@@ -51,14 +54,14 @@ public class PaymentMethodController {
             @RequestBody PaymentMethodRequest request)
     {
         PaymentMethodResponse paymentMethodResponse = paymentMethodService.updatePaymentMethod(request, id);
-        return ResponseUtil.buildResponse(HttpStatus.OK, "Payment method updated", paymentMethodResponse);
+        return ResponseUtil.buildResponse(HttpStatus.OK, SUCCESS_UPDATE_PAYMENT_METHOD, paymentMethodResponse);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deletePaymentMethod(@PathVariable String id) {
         PaymentMethod paymentMethod = paymentMethodService.getOne(id);
         paymentMethodService.deletePaymentMethod(paymentMethod.getId());
-        return ResponseUtil.buildResponse(HttpStatus.OK, "Payment method deleted", null);
+        return ResponseUtil.buildResponse(HttpStatus.OK, SUCCESS_DELETE_PAYMENT_METHOD, null);
     }
 
 }

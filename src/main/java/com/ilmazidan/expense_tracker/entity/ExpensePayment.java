@@ -1,12 +1,13 @@
 package com.ilmazidan.expense_tracker.entity;
 
+import com.ilmazidan.expense_tracker.constant.Constant;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "t_expense_payment")
+@Table(name = Constant.EXPENSE_PAYMENT)
 @Getter
 @Setter
 @AllArgsConstructor

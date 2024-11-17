@@ -6,6 +6,7 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import com.ilmazidan.expense_tracker.constant.Constant;
 import com.ilmazidan.expense_tracker.entity.UserAccount;
 import com.ilmazidan.expense_tracker.service.JwtService;
 import com.ilmazidan.expense_tracker.service.RedisService;
@@ -35,6 +36,8 @@ public class JwtServiceImpl implements JwtService {
     @Value("${expense-tracker.jwt.issuer}")
     private String ISSUER;
 
+    public static final String BLACKLISTED = "BLACKLISTED";
+
     private final RedisService redisService;
 
     @Override
@@ -47,11 +50,11 @@ public class JwtServiceImpl implements JwtService {
                     .withIssuedAt(Instant.now())
                     .withExpiresAt(Instant.now().plus(EXPIRATION_IN_MINUTES, ChronoUnit.MINUTES))
                     .withSubject(userAccount.getId())
-                    .withClaim("role", userAccount.getRole().getDescription())
+                    .withClaim(Constant.ROLE, userAccount.getRole().getDescription())
                     .sign(algorithm);
         } catch (JWTCreationException e) {
             log.error("Error creating JWT Token: {}", e.getMessage());
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Error creating JWT Token");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, Constant.ERROR_CREATING_JWT_TOKEN);
         }
     }
 
@@ -67,7 +70,7 @@ public class JwtServiceImpl implements JwtService {
             return decodedJWT.getSubject();
         } catch (JWTVerificationException e) {
             log.error("Error Extracting JWT with token: {}", e.getMessage());
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Error invalid token");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, Constant.ERROR_INVALID_JWT_TOKEN);
         }    }
 
     @Override
@@ -83,13 +86,13 @@ public class JwtServiceImpl implements JwtService {
         DecodedJWT decodedJWT = extractClaimJWT(token);
 
         if (decodedJWT == null) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Error invalid JWT Token");
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, Constant.ERROR_INVALID_JWT_TOKEN);
         }
 
         Date expiresAt = decodedJWT.getExpiresAt();
         long timeLeft = (expiresAt.getTime() - System.currentTimeMillis());
 
-        redisService.save(token, "BLACKLISTED", Duration.ofMillis(timeLeft));
+        redisService.save(token, BLACKLISTED, Duration.ofMillis(timeLeft));
     }
 
     private String parseToken(String bearerToken) {

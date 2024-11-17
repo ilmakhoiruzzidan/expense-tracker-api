@@ -1,5 +1,6 @@
 package com.ilmazidan.expense_tracker.service.impl;
 
+import com.ilmazidan.expense_tracker.constant.Constant;
 import com.ilmazidan.expense_tracker.constant.UserRole;
 import com.ilmazidan.expense_tracker.dto.request.UserRequest;
 import com.ilmazidan.expense_tracker.dto.request.UserUpdatePasswordRequest;
@@ -64,7 +65,7 @@ public class UserServiceImpl implements UserService {
         try {
             UserRole userRole = UserRole.findByDescription(request.getRole());
             if (userRole == null)
-                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error role not found");
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, Constant.ERROR_ROLE_NOT_FOUND);
             UserAccount userAccount = UserAccount.builder()
                     .id(UUID.randomUUID().toString())
                     .username(request.getUsername())
@@ -74,7 +75,7 @@ public class UserServiceImpl implements UserService {
             userAccountRepository.saveUserAccount(userAccount);
             return Mapper.toUserResponse(userAccount);
         } catch (DataIntegrityViolationException e) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "User already exists");
+            throw new ResponseStatusException(HttpStatus.CONFLICT, Constant.ERROR_USER_ALREADY_EXISTS);
         }
     }
 
@@ -107,7 +108,7 @@ public class UserServiceImpl implements UserService {
         UserAccount userAccount = getById(id);
 
         if (!passwordEncoder.matches(request.getCurrentPassword(), userAccount.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error invalid credential!");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, Constant.ERROR_INVALID_CREDENTIALS);
         }
 
         String encodedNewPassword = passwordEncoder.encode(request.getNewPassword());
@@ -118,7 +119,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userAccountRepository.findByUsername(username).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND)
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, Constant.ERROR_USER_NOT_FOUND)
         );
     }
 }

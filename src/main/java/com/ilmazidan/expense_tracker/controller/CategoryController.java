@@ -1,5 +1,6 @@
 package com.ilmazidan.expense_tracker.controller;
 
+import com.ilmazidan.expense_tracker.constant.Constant;
 import com.ilmazidan.expense_tracker.dto.request.CategoryRequest;
 import com.ilmazidan.expense_tracker.dto.request.PagingAndSortRequest;
 import com.ilmazidan.expense_tracker.dto.response.CategoryResponse;
@@ -13,7 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/categories")
+@RequestMapping(Constant.CATEGORIES_API)
 @RequiredArgsConstructor
 public class CategoryController {
     private final CategoryService categoryService;
@@ -31,19 +32,19 @@ public class CategoryController {
                 .sortBy(sortBy)
                 .build();
         Page<CategoryResponse> categoryResponsePage = categoryService.getAllCategories(pagingAndSortRequest);
-        return ResponseUtil.buildResponsePagination(HttpStatus.OK, "Success retrieve all categories", categoryResponsePage);
+        return ResponseUtil.buildResponsePagination(HttpStatus.OK, Constant.SUCCESS_RETRIEVE_ALL_CATEGORIES, categoryResponsePage);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getCategoryById(@PathVariable String id) {
         CategoryResponse categoryResponse = categoryService.getCategoryById(id);
-        return ResponseUtil.buildResponse(HttpStatus.OK, "Success retrieve category", categoryResponse);
+        return ResponseUtil.buildResponse(HttpStatus.OK, Constant.SUCCESS_RETRiEVE_CATEGORY, categoryResponse);
     }
 
     @PostMapping
     public ResponseEntity<?> createCategory(@RequestBody CategoryRequest request) {
         CategoryResponse categoryResponse = categoryService.createCategory(request);
-        return ResponseUtil.buildResponse(HttpStatus.CREATED, "Successfully create category", categoryResponse);
+        return ResponseUtil.buildResponse(HttpStatus.CREATED, Constant.SUCCESS_CREATE_CATEGORY, categoryResponse);
     }
 
     @PutMapping("/{id}")
@@ -52,14 +53,14 @@ public class CategoryController {
             @RequestBody CategoryRequest request)
     {
         CategoryResponse categoryResponse = categoryService.updateCategory(request, id);
-        return ResponseUtil.buildResponse(HttpStatus.OK, "Successfully update category", categoryResponse);
+        return ResponseUtil.buildResponse(HttpStatus.OK, Constant.SUCCESS_UPDATE_CATEGORY, categoryResponse);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteCategory(@PathVariable String id) {
         Category category = categoryService.getOne(id);
         categoryService.deleteCategory(category.getId());
-        return ResponseUtil.buildResponse(HttpStatus.OK, "Successfully delete category", null);
+        return ResponseUtil.buildResponse(HttpStatus.OK, Constant.SUCCESS_DELETE_CATEGORY, null);
     }
 }
 

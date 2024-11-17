@@ -1,5 +1,6 @@
 package com.ilmazidan.expense_tracker.controller;
 
+import com.ilmazidan.expense_tracker.constant.Constant;
 import com.ilmazidan.expense_tracker.dto.request.AuthRequest;
 import com.ilmazidan.expense_tracker.dto.request.RegisterRequest;
 import com.ilmazidan.expense_tracker.dto.response.AuthResponse;
@@ -22,7 +23,9 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
 
-@RequestMapping("/api/auth")
+
+
+@RequestMapping(Constant.AUTH_API)
 @RestController
 @RequiredArgsConstructor
 public class AuthController {
@@ -38,7 +41,7 @@ public class AuthController {
     ) {
         AuthResponse authResponse = authService.login(authRequest);
         setCookie(response, authResponse.getRefreshToken());
-        return ResponseUtil.buildResponse(HttpStatus.OK, "Successfully logged in", authResponse);
+        return ResponseUtil.buildResponse(HttpStatus.OK, Constant.SUCCESS_LOGIN, authResponse);
     }
 
     @PostMapping("/register")
@@ -46,7 +49,7 @@ public class AuthController {
             @RequestBody RegisterRequest registerRequest
     ) {
         RegisterResponse registerResponse = authService.register(registerRequest);
-        return ResponseUtil.buildResponse(HttpStatus.OK, "Successfully registered", registerResponse);
+        return ResponseUtil.buildResponse(HttpStatus.OK, Constant.SUCCESS_REGISTER, registerResponse);
     }
 
 
@@ -58,7 +61,7 @@ public class AuthController {
         String refreshToken = getRefreshTokenFromCookie(request);
         AuthResponse authResponse = authService.refreshToken(refreshToken);
         setCookie(response, authResponse.getRefreshToken());
-        return ResponseUtil.buildResponse(HttpStatus.OK, "Successfully refreshed token", authResponse);
+        return ResponseUtil.buildResponse(HttpStatus.OK, Constant.SUCCESS_REFRESH_TOKEN, authResponse);
     }
 
     @PostMapping("/logout")
@@ -67,19 +70,19 @@ public class AuthController {
     ) {
         String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
         authService.logout(bearerToken);
-        return ResponseUtil.buildResponse(HttpStatus.OK, "Successfully logged out", null);
+        return ResponseUtil.buildResponse(HttpStatus.OK, Constant.SUCCESS_LOGOUT, null);
     }
 
     private String getRefreshTokenFromCookie(HttpServletRequest request) {
         Cookie cookie = Arrays.stream(request.getCookies())
-                .filter(c -> c.getName().equals("refreshToken"))
+                .filter(c -> c.getName().equals(Constant.REFRESH_TOKEN))
                 .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, "Refresh token is required"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST, Constant.REQUIRE_REFRESH_TOKEN));
         return cookie.getValue();
     }
 
     private void setCookie(HttpServletResponse response, String refreshToken) {
-        Cookie cookie = new Cookie("refreshToken", refreshToken);
+        Cookie cookie = new Cookie(Constant.REFRESH_TOKEN, refreshToken);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         cookie.setMaxAge(60 * 60 * REFRESH_TOKEN_EXPIRY);

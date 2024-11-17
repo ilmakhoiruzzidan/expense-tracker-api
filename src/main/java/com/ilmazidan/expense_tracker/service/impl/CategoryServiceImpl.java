@@ -1,5 +1,6 @@
 package com.ilmazidan.expense_tracker.service.impl;
 
+import com.ilmazidan.expense_tracker.constant.Constant;
 import com.ilmazidan.expense_tracker.constant.ExpenseCategory;
 import com.ilmazidan.expense_tracker.dto.request.CategoryRequest;
 import com.ilmazidan.expense_tracker.dto.request.PagingAndSortRequest;
@@ -82,7 +83,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category getOne(String id) {
         return categoryRepository.findById(id).orElseThrow(
-                () -> new ResponseStatusException(HttpStatus.NOT_FOUND)
+                () -> new ResponseStatusException(HttpStatus.NOT_FOUND, Constant.ERROR_CATEGORY_NOT_FOUND)
         );
     }
 }
