@@ -2,11 +2,13 @@ package com.ilmazidan.expense_tracker.service.impl;
 
 import com.ilmazidan.expense_tracker.constant.UserRole;
 import com.ilmazidan.expense_tracker.dto.request.UserRequest;
+import com.ilmazidan.expense_tracker.dto.request.UserUpdatePasswordRequest;
 import com.ilmazidan.expense_tracker.dto.response.UserResponse;
 import com.ilmazidan.expense_tracker.entity.UserAccount;
 import com.ilmazidan.expense_tracker.repository.UserAccountRepository;
 import com.ilmazidan.expense_tracker.service.UserService;
 import com.ilmazidan.expense_tracker.util.Mapper;
+import com.ilmazidan.expense_tracker.util.ValidationUtil;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +37,8 @@ public class UserServiceImpl implements UserService {
 
     private final PasswordEncoder passwordEncoder;
     private final UserAccountRepository userAccountRepository;
+
+    private final ValidationUtil validationUtil;
 
     @PostConstruct
     public void initUser() {
@@ -94,6 +98,20 @@ public class UserServiceImpl implements UserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserAccount userAccount = (UserAccount) authentication.getPrincipal();
         return Mapper.toUserResponse(userAccount);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void updatePassword(String id, UserUpdatePasswordRequest request) {
+        validationUtil.validate(request);
+        UserAccount userAccount = getById(id);
+
+        if (!passwordEncoder.matches(request.getCurrentPassword(), userAccount.getPassword())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Error invalid credential!");
+        }
+
+        String encodedNewPassword = passwordEncoder.encode(request.getNewPassword());
+        userAccountRepository.updatePassword(id, encodedNewPassword);
     }
 
     @Transactional(readOnly = true)

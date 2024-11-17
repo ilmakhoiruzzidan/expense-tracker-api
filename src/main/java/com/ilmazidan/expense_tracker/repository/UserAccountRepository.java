@@ -54,6 +54,16 @@ public interface UserAccountRepository extends JpaRepository<UserAccount, String
     )
     Optional<UserAccount> findByUsername(String username);
 
+
+    @Transactional
+    @Modifying
+    @Query(
+            value = "UPDATE m_user_account SET password = :newPassword, last_modified_at = CURRENT_TIMESTAMP " +
+                    "WHERE id = :userId",
+            nativeQuery = true
+    )
+    void updatePassword(String userId, String newPassword);
+
 }
 
 
