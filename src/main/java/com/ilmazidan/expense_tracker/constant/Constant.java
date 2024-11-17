@@ -8,7 +8,7 @@ public class Constant {
     public static final String USER_TABLE = "m_user_account";
     public static final String PAYMENT_METHOD_TABLE = "m_payment_method";
     public static final String EXPENSE_PAYMENT = "t_expense_payment";
-    public static final String EXPENSE_TABLE = "m_expense";
+    public static final String EXPENSE_TABLE = "t_expense";
     public static final String CATEGORY_TABLE = "m_category";
 
     // API

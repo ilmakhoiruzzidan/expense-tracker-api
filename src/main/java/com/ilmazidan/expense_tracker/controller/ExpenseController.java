@@ -14,6 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import static com.ilmazidan.expense_tracker.constant.Constant.*;
 
 @RestController
@@ -34,6 +37,28 @@ public class ExpenseController {
     public ResponseEntity<?> getExpenseById(@PathVariable String id) {
         ExpenseResponse expenseResponse = expenseService.getExpenseById(id);
         return ResponseUtil.buildResponse(HttpStatus.OK, SUCCESS_RETRiEVE_EXPENSE, expenseResponse);
+    }
+
+    @GetMapping("/by-date-range")
+    public ResponseEntity<?> getExpenseByDateRange(
+            @RequestParam(name = "sortBy", required = false) String sortBy,
+            @RequestParam(name = "page", required = false, defaultValue = "1") Integer page,
+            @RequestParam(name = "size", required = false, defaultValue = "10") Integer size,
+            @RequestParam(name = "startDate") String startDate,
+            @RequestParam(name = "endDate") String endDate
+    ) {
+        PagingAndSortRequest pagingAndSortRequest = PagingAndSortRequest.builder()
+                .page(page)
+                .size(size)
+                .sortBy(sortBy)
+                .build();
+
+        LocalDate start = LocalDate.parse(startDate);
+        LocalDate end = LocalDate.parse(endDate);
+        LocalDateTime startDateTime = start.atStartOfDay();
+        LocalDateTime endDateTime = end.atTime(23, 59, 59);
+        Page<ExpenseResponse> expenseResponses = expenseService.getExpenseByDate(pagingAndSortRequest, startDateTime, endDateTime);
+        return ResponseUtil.buildResponsePagination(HttpStatus.OK, SUCCESS_RETRIEVE_ALL_EXPENSES, expenseResponses);
     }
 
     @Operation(summary = "Get all expenses", description = "Retrieve a paginated list of all expenses")

@@ -75,6 +75,14 @@ public class ExpenseServiceImpl implements ExpenseService {
         return expenses.map(Mapper::toExpenseResponse);
     }
 
+    @Override
+    public Page<ExpenseResponse> getExpenseByDate(PagingAndSortRequest request, LocalDateTime startDate, LocalDateTime endDate) {
+        Sort sortBy = SortUtil.parseSort(request.getSortBy());
+        Pageable pageRequest = PageRequest.of(request.getPage(), request.getSize(), sortBy);
+        Page<Expense> expenses = expenseRepository.findExpenseByDateRange(startDate, endDate, pageRequest);
+        return expenses.map(Mapper::toExpenseResponse);
+    }
+
     @Transactional(rollbackFor = Exception.class)
     @Override
     public ExpenseResponse updateExpense(ExpenseRequest request, String id) {

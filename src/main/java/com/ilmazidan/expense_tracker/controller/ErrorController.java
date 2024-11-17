@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.format.DateTimeParseException;
+
 @RestController
 @ControllerAdvice
 @Slf4j
@@ -54,5 +56,12 @@ public class ErrorController {
     public ResponseEntity<?> handlingConstraintViolationException(ConstraintViolationException e) {
         log.error("Exception ConstraintViolationException : {}", e.getMessage());
         return ResponseUtil.buildResponse(HttpStatus.BAD_REQUEST, e.getMessage(), null);
+    }
+
+    @ExceptionHandler(DateTimeParseException.class)
+    public ResponseEntity<?> handleDateTimeParseException(DateTimeParseException e) {
+        log.error("Exception DateTimeParseException : {}", e.getMessage());
+        String message = "Invalid date format. Please use the correct date format (yyyy-MM-dd).";
+        return ResponseUtil.buildResponse(HttpStatus.BAD_REQUEST, message, null);
     }
 }
